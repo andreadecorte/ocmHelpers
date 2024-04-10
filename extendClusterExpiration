@@ -1,0 +1,18 @@
+#!/bin/bash
+# Extend cluster expiration by 2 days
+
+if [ -z "$1" ]
+  then
+    echo "No cluster id supplied"
+fi
+
+expiration_timestamp=$(gdate --date="+2 days" -u '+%Y-%m-%dT%H:%M:%SZ' --utc)
+
+expiration_patch=$(cat <<EOF
+{
+  "expiration_timestamp": "${expiration_timestamp}"
+}
+EOF
+)
+
+echo "$expiration_patch" | ocm patch "/api/clusters_mgmt/v1/clusters/$1" | jq -r ".expiration_timestamp"

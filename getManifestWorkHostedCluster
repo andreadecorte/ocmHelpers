@@ -1,0 +1,10 @@
+#!/bin/bash -e
+#
+
+# Prepare the environment:
+if [ -z "$1" ]
+  then
+    echo "No cluster id supplied"
+fi
+
+getManifestWork "$1"  | jq '.spec.workload.manifests[] | select(.kind == "HostedCluster")'

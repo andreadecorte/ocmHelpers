@@ -1,0 +1,10 @@
+#!/bin/bash -e
+#
+
+# Prepare the environment:
+if [ -z "$1" ]
+  then
+    echo "No cluster id supplied"
+fi
+
+ocm get cluster "$1/resources/live" | jq -r ".resources[\"manifest_work-$1\"]" |  jq '.status.resourceStatus.manifests[] | select(.resourceMeta.kind == "HostedCluster")'

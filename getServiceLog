@@ -1,0 +1,10 @@
+#!/bin/bash -ex
+#
+
+# Prepare the environment:
+if [ -z "$1" ]
+  then
+    echo "No cluster id supplied"
+fi
+
+ocm get /api/service_logs/v1/clusters/cluster_logs/ -p "cluster_id=$1" -p size=-1 | jq -j '.items |= sort_by(.timestamp) | .items[] | .timestamp,": ",.summary,"\n"'

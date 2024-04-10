@@ -1,0 +1,14 @@
+#!/bin/bash -e
+#
+
+# Prepare the environment:
+if [ -z "$1" ]
+  then
+    echo "No cluster id supplied"
+fi
+if [ -z "$2" ]
+  then
+    echo "No nodepool id supplied"
+fi
+
+ocm get cluster "$1/resources/live" | jq -r ".resources[\"manifest_work-$1-$2\"]" | jq
