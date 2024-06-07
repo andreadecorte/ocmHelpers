@@ -1,0 +1,45 @@
+#!/bin/bash -e
+#
+# Wrapper for ocm login. Mostly useful to also logout
+# and handle local dev
+
+# Prepare the environment:
+if [ -z "$1" ]
+  then
+    echo "No environment supplied"
+    exit 1
+fi
+
+
+case $1 in
+    local)
+        url="--url=http://localhost:9000 --insecure"
+        ;;
+
+    int | integration)
+        url="--url=integration"
+        ;;
+
+    stg | stage | staging)
+        url="--url=stage"
+        ;;
+
+    prd | prod | production)
+        url="--url=production"
+        ;;
+
+    *)
+        echo "Invalid environment!"
+        exit 1
+        ;;
+esac
+
+
+ocm logout
+ocm login --use-auth-code $(echo "${url}")
+
+echo ""
+echo "Now logged in $1!"
+echo ""
+# ocm whoami doesn't show the endpoint
+rosa whoami
