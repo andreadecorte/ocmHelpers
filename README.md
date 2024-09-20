@@ -5,3 +5,4 @@ Use at your own risk.
 ## Requirements
 * jq
 * [ocm-cli](https://github.com/openshift-online/ocm-cli)
+* [rosa](https://github.com/openshift/rosa)

@@ -5,6 +5,7 @@
 if [ -z "$1" ]
   then
     echo "No cluster id supplied"
+    exit 1
 fi
 
 ocm get cluster "$1/resources/live" | jq -r ".resources[\"manifest_work-$1\"]" | jq

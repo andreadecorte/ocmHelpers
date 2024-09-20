@@ -5,6 +5,7 @@
 if [ -z "$1" ]
   then
     echo "No cluster id supplied"
+    exit 1
 fi
 
 getManifestWork "$1"  | jq '.spec.workload.manifests[] | select(.kind == "HostedCluster")'

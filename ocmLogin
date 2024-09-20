@@ -2,14 +2,25 @@
 #
 # Wrapper for ocm login. Mostly useful to also logout
 # and handle local dev
+# By default using Service account credentials in the env
+# OCM_SA_CLIENT_ID OCM_SA_CLIENT_SECRET, unless passing a flag
+#
+# Usage: ocmLogin [-a] valid-environment
 
 # Prepare the environment:
+auth_code=false
+while getopts a flag
+do
+    case "${flag}" in
+        a) auth_code=true; echo "Using auth_code instead of service account"; shift;;
+    esac
+done
+
 if [ -z "$1" ]
   then
     echo "No environment supplied"
     exit 1
 fi
-
 
 case $1 in
     local)
@@ -36,7 +47,13 @@ esac
 
 
 ocm logout
-ocm login --use-auth-code $(echo "${url}")
+if $auth_code;
+then
+    ocm login --use-auth-code $(echo "${url}")
+else
+    ocm login --client-id "${OCM_SA_CLIENT_ID}" --client-secret "${OCM_SA_CLIENT_SECRET}" $(echo "${url}")
+fi
+
 
 echo ""
 echo "Now logged in $1!"
